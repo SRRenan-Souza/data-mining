@@ -1,17 +1,21 @@
 {
     "queries": {
+        "PIB por município": {
+            "api": "https://servicodados.ibge.gov.br/api/v3/agregados/",
+            "url": "5938/periodos/2022/variaveis/37?localidades=N6[all]"
+        },
+
         "PIB por região": {
-            "url": "https://servicodados.ibge.gov.br/api/v3/agregados/...",
-            "features": {
-                "D1N": "regiao",
-                "V": "pib"
-            },
+            "api": "https://servicodados.ibge.gov.br/api/v3/agregados/",
+            "url": "5938/periodos/2022/variaveis/37?localidades=N2[all]"
+        },
+
         "Alfabetização por município": {
-            "url": "https://apisidra.ibge.gov.br/values/...",
+            "api": "https://apisidra.ibge.gov.br/",
+            "url": "values/t/9543/n6/all/v/2513/p/2022/f/n",
             "features": {
                 "D1N": "municipio",
                 "V": "alfabetizacao"
-            }
             }
         }
     }
