@@ -1,4 +1,4 @@
-COMO MONTAR AS CONSULTAS NO SIDRA:
+**COMO MONTAR AS CONSULTAS NO SIDRA:**
 No site <https://sidra.ibge.gov.br/acervo>, selecione os Filtros desejados, em seguida siga para **Visualização** da tabela de dados agregados gerada. No cabeçalho da tabela, acesse **Funções/Página Web**, nela haverá um **código HTML**:
 
 **EXEMPLO:**
