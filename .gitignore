@@ -1,0 +1,14 @@
+# Ambientes Virtuais
+.venv/
+venv/
+env/
+ENV/
+
+# Tabelas e Dados
+/data/
+*.csv
+*.xlsx
+
+# Configurações
+.env
+.env.*
