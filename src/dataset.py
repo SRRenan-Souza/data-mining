@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from enum import Enum
 
 import pandas as pd
 import requests, json
@@ -7,8 +8,11 @@ import requests, json
 DIR : Path = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 DATA: Path = DIR / "data"
 
-IBGE : str = "https://servicodados.ibge.gov.br/api/v3/agregados/"
-SIDRA: str = "https://apisidra.ibge.gov.br/"
+
+class Provider(Enum):
+    IBGE = "https://servicodados.ibge.gov.br/api/v3/agregados/"
+    SIDRA = "https://apisidra.ibge.gov.br/"
+
 
 def load_queries(file_path: Path) -> dict:
     with open(file_path, "r", encoding="utf-8") as file:
@@ -16,50 +20,42 @@ def load_queries(file_path: Path) -> dict:
 
 @dataclass
 class API:
-    queries: Path = DATA/"queries.json"
+    queries: Path = DATA / "queries.json"
 
     # Consulta uma API e retorna uma tabela nomeada e formatada
-    def query(self, name: str) -> pd.DataFrame:
+    def query(self, provider: Provider, info: str) -> pd.DataFrame:
+        """ Implementação das APIs do IBGE/SIDRA conforme
+            as consultas predefinidas em queries.json. """
 
-        """ Consulta as APIs do IBGE/SIDRA conforme predefinido em queries.JSON. """
+        queries: dict = load_queries(self.queries)
 
-        queries = load_queries(self.queries)
+        try:
+            query = queries[provider.name][info]
+        except KeyError:
+            raise KeyError(f"Consulta '{info}' do provedor '{provider.name}' não foi encontrada.")
 
-        if name not in queries:
-            raise KeyError(f"Consulta não encontrada: {name}")
+        url = provider.value + query["params"]
 
-        query = queries[name]
-        url   = query["api"] + query["url"]
-    
-        response = requests.get(url, timeout = 15)
+        response = requests.get(url, timeout=15)
         response.raise_for_status()
 
         data = response.json()
 
-        # Tratamento das tabelas brutas para cada API
-        if   IBGE == query["api"]:
-            table = self._unnest(data)
+        table = self._unnest(data) if provider == Provider.IBGE else pd.DataFrame(data)
 
-        elif SIDRA == query["api"]:
-            table = pd.DataFrame(data)
-
-
-        # Seleciona os atributos desejados nas tabelas extraídas da API
-        features = query.get("features")
-
-        if features:
-            table = table[list(features)]
-            table = table.rename(columns = features)
+        if features := query.get("features"):
+            table = table[features]
+            table.columns = table.iloc[0]
+            table = table.iloc[1:].reset_index(drop = True)
 
         # DEBUG
         print(table)
-
         return table
-
 
     def _unnest(self, data: list) -> pd.DataFrame:
 
-        """  Desaninha os dados serializados pela API de Agregados do IBGE. """
+        """  Desaninhamento os dados serializados 
+             pela API de dados agregados do IBGE. """
 
         tuples = []
 
@@ -83,9 +79,9 @@ dataset: list[pd.DataFrame] = []
 
 try:
     # Armazena as tabelas extraídas da API em uma lista
-    dataset.append(api.query("PIB por região"))
-    dataset.append(api.query("PIB por município"))
-    dataset.append(api.query("Alfabetização por município"))
+    dataset.append(api.query(Provider.IBGE,  "PIB por região"))
+    dataset.append(api.query(Provider.IBGE,  "PIB por município"))
+    dataset.append(api.query(Provider.SIDRA, "Alfabetização por município"))
     # OUTRAS CONSULTAS...
    
 
