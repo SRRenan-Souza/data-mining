@@ -42,6 +42,9 @@ class API:
 
         elif SIDRA == query["api"]:
             table = pd.DataFrame(data)
+                        
+            #Remove o cabeçalho criado pelo SIDRA
+            table = table.iloc[1:].reset_index(drop=True)
 
 
         # Seleciona os atributos desejados nas tabelas extraídas da API
@@ -52,7 +55,7 @@ class API:
             table = table.rename(columns = features)
 
         # DEBUG
-        print(table)
+        # print(table)
 
         return table
 
@@ -81,25 +84,3 @@ class API:
 api: API = API()
 dataset: list[pd.DataFrame] = []
 
-try:
-    # Armazena as tabelas extraídas da API em uma lista
-    dataset.append(api.query("PIB por região"))
-    dataset.append(api.query("PIB por município"))
-    dataset.append(api.query("Alfabetização por município"))
-    # OUTRAS CONSULTAS...
-   
-
-except FileNotFoundError as error:
-    print(f"Arquivo de configuração não encontrado: {error}")
-
-except json.JSONDecodeError as error:
-    print(f"Erro ao decodificar JSON: {error}")
-
-except KeyError as error:
-    print(f"Consulta ou coluna não encontrada: {error}")
-
-except requests.exceptions.RequestException as error:
-    print(f"Erro de requisição de API/HTTP: {error}")
-
-except Exception as error:
-    print(f"Erro inesperado: {error}")
