@@ -1,51 +1,32 @@
 {
     "queries": {
-        "PIB por município": {
-            "api": "https://servicodados.ibge.gov.br/api/v3/agregados/",
-            "url": "5938/periodos/2022/variaveis/37?localidades=N6[all]"
-        },
-
-        "PIB por região": {
-            "api": "https://servicodados.ibge.gov.br/api/v3/agregados/",
-            "url": "5938/periodos/2022/variaveis/37?localidades=N2[all]",
-            "features": {
-                "codigo": "Codigo",
-                "localidade": "Localidade",
-                "2022": "PIB"
+        "IBGE":{
+            "PIB por município": {
+                "params": "5938/periodos/2022/variaveis/37?localidades=N6[all]",
+                "features": []
+            },
+            "PIB por região": {
+                "params": "5938/periodos/2022/variaveis/37?localidades=N2[all]",
+                "features": []
             }
         },
 
-        "PIB por região - 2016/2022": {
-            "api": "https://apisidra.ibge.gov.br/",
-            "url": "values/t/5938/n2/all/v/37/p/2016,2022/d/v37 0/l/v,p,t",
-            "features": {
-                "D1C": "Codigo",
-                "D1N": "Localidade",
-                "D3N": "Ano",
-                "V": "PIB (Mil reais)"
-            }
-        },
+        "SIDRA":{
+            "Alfabetização por município": {
+                "params": "values/t/9543/n6/all/v/2513/p/2022/f/n",
+                "features": ["D1N", "V"]
+            },
 
-        "Alfabetização por município": {
-            "api": "https://apisidra.ibge.gov.br/",
-            "url": "values/t/9543/n6/all/v/2513/p/2022/f/n",
-            "features": {
-                "D1N": "Municipio",
-                "V": "Alfabetizacao"
-            }
-        },
-        "Alfabetização por Região": {
-            "api": "https://apisidra.ibge.gov.br/",
-            "url": "values/t/10436/n2/all/v/2513/p/2016,2022/c58/95253",
-            "features": {
-                "D1C": "Codigo",
-                "D1N": "Localidade", 
-                "D3N" : "Ano",
-                "V": "Taxa de Alfabetização"
-                
+            "Alfabetização por Região": {
+                "params": "values/t/10436/n2/all/v/2513/p/2016,2022/c58/95253",
+                "features": ["D1C", "D1N", "D3N", "V"]
+            },
 
+            "PIB por região - 2016/2022": {
+                "params": "values/t/5938/n2/all/v/37/p/2016,2022/d/v37 0/l/v,p,t",
+                "features": ["D1C", "D1N", "D3N", "V"]
             }
-
         }
+        
     }
 }
