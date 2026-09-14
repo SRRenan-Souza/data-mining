@@ -5,9 +5,29 @@ env/
 ENV/
 
 # Tabelas e Dados
+  GNU nano 7.2                                                                                  .gitignore                                                                                           
+# Ambientes Virtuais
+.venv/
+venv/
+env/
+ENV/
+
+# Tabelas e Dados
 /data/
 *.csv
 *.xlsx
+
+# Configurações
+.env
+.env.*
+/data/
+*.csv
+*.xlsx
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
 
 # Configurações
 .env
